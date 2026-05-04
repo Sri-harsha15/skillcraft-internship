@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Multicolor Navbar</title>
+<title>SkillCraft Internship Dashboard</title>
 
 <style>
 /* RESET */
@@ -11,154 +11,139 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: Arial, sans-serif;
-  scroll-behavior: smooth;
+  font-family: "Segoe UI", sans-serif;
 }
 
-/* BODY */
 body {
-  background: #0f172a;
-}
-
-/* NAVBAR */
-nav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  padding: 15px 50px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
-  background: linear-gradient(90deg, #ff416c, #ff4b2b, #1fa2ff, #a044ff);
-  background-size: 300% 300%;
-  animation: gradientMove 6s ease infinite;
-
-  transition: all 0.4s ease;
-  z-index: 1000;
-}
-
-/* ANIMATION */
-@keyframes gradientMove {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-/* SCROLLED NAV */
-nav.scrolled {
-  background: linear-gradient(90deg, #0f2027, #203a43, #2c5364);
-  box-shadow: 0 5px 20px rgba(0,0,0,0.5);
-}
-
-/* LOGO */
-.logo {
-  font-size: 22px;
-  font-weight: bold;
+  background: linear-gradient(135deg, #0f172a, #1e293b, #0f172a);
   color: white;
+  min-height: 100vh;
 }
 
-/* MENU */
-ul {
-  list-style: none;
-  display: flex;
-  gap: 25px;
+/* HEADER */
+header {
+  text-align: center;
+  padding: 60px 20px 30px;
 }
 
-ul li a {
+header h1 {
+  font-size: 36px;
+  background: linear-gradient(90deg,#ff512f,#dd2476,#1fa2ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+header p {
+  opacity: 0.8;
+  margin-top: 10px;
+}
+
+/* GRID */
+.container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  padding: 40px;
+  max-width: 1000px;
+  margin: auto;
+}
+
+/* CARD */
+.card {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 15px;
+  padding: 25px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  transition: 0.3s ease;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: translateY(-10px) scale(1.03);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+  background: rgba(255,255,255,0.12);
+}
+
+/* ICON */
+.card span {
+  font-size: 40px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+/* LINK BUTTON */
+.card a {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 15px;
   text-decoration: none;
   color: white;
-  font-size: 16px;
-  padding: 8px 14px;
-  border-radius: 20px;
-  transition: all 0.3s ease;
-}
-
-/* HOVER */
-ul li a:hover {
-  background: linear-gradient(45deg, #00f260, #0575e6, #ff00cc);
-  transform: scale(1.1);
-  box-shadow: 0 0 15px rgba(255,255,255,0.6);
-}
-
-/* SCROLLED HOVER */
-nav.scrolled ul li a:hover {
-  background: linear-gradient(45deg, #ffcc00, #ff6600);
-}
-
-/* SECTIONS */
-section {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 45px;
-  color: white;
-}
-
-/* DIFFERENT BACKGROUNDS */
-#home { background: #1e1e2f; }
-#about { background: #16213e; }
-#services { background: #0f3460; }
-#contact { background: #53354a; }
-#button { background: #111827; }
-
-/* BUTTON STYLE INSIDE SECTION */
-.cta-btn {
-  padding: 12px 25px;
-  font-size: 18px;
-  border: none;
-  border-radius: 30px;
-  cursor: pointer;
-  color: white;
-  background: linear-gradient(45deg, #ff512f, #dd2476);
+  border-radius: 8px;
+  background: linear-gradient(45deg,#ff512f,#dd2476);
   transition: 0.3s;
 }
 
-.cta-btn:hover {
-  transform: scale(1.1);
-  box-shadow: 0 0 15px rgba(255,0,100,0.6);
+.card a:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 15px rgba(255,255,255,0.2);
+}
+
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 20px;
+  opacity: 0.6;
 }
 </style>
+
 </head>
 
 <body>
 
-<!-- NAVBAR -->
-<nav id="navbar">
-  <div class="logo">🌈 MySite</div>
-  <ul>
-    <li><a href="#home">Home</a></li>
-    <li><a href="#about">About</a></li>
-    <li><a href="#services">Services</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-</nav>
+<header>
+  <h1>🚀 SkillCraft Internship Dashboard</h1>
+  <p>Modern Project Collection | Click to Open Apps</p>
+</header>
 
-<!-- SECTIONS -->
-<section id="home">🏠 Home Section</section>
-<section id="about">👤 About Section</section>
-<section id="services">⚙ Services Section</section>
-<section id="contact">📞 Contact Section</section>
+<div class="container">
 
-<!-- BUTTON SECTION -->
-<section id="button">
-  <button class="cta-btn">🚀 Get Started</button>
-</section>
+  <div class="card">
+    <span>🧮</span>
+    <h3>Calculator</h3>
+    <a href="task2-calculator-light-ui.html" target="_blank">Open</a>
+  </div>
 
-<!-- SCRIPT -->
-<script>
-const navbar = document.getElementById("navbar");
+  <div class="card">
+    <span>⏱</span>
+    <h3>Stopwatch</h3>
+    <a href="task2-stopwatch-index.html" target="_blank">Open</a>
+  </div>
 
-window.addEventListener("scroll", () => {
-  if (window.scrollY > 50) {
-    navbar.classList.add("scrolled");
-  } else {
-    navbar.classList.remove("scrolled");
-  }
-});
-</script>
+  <div class="card">
+    <span>❓</span>
+    <h3>Quiz App</h3>
+    <a href="task3-quiz-app.html" target="_blank">Open</a>
+  </div>
+
+  <div class="card">
+    <span>🎮</span>
+    <h3>Tic Tac Toe</h3>
+    <a href="task3-tic-tac-toe-ai-game.html" target="_blank">Open</a>
+  </div>
+
+  <div class="card">
+    <span>📝</span>
+    <h3>Todo App</h3>
+    <a href="task4-todo-advanced-app.html" target="_blank">Open</a>
+  </div>
+
+</div>
+
+<footer>
+  © 2026 SkillCraft Internship Project | Built by You 🚀
+</footer>
 
 </body>
 </html>
