@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advanced Quiz App</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* 🌈 BACKGROUND */
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: linear-gradient(-45deg,
+    #ff9a9e,
+    #fad0c4,
+    #a18cd1,
+    #fbc2eb,
+    #84fab0,
+    #8fd3f4
+  );
+
+  background-size: 400% 400%;
+  animation: bg 10s ease infinite;
+}
+
+@keyframes bg {
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
+}
+
+/* BOX */
+.quiz-box {
+  width: 480px;
+  padding: 20px;
+  border-radius: 18px;
+
+  background: rgba(255,255,255,0.25);
+  backdrop-filter: blur(15px);
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* TOP BAR */
+.top {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* PROGRESS */
+.progress {
+  width: 100%;
+  height: 8px;
+  background: #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 15px;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg,#ff512f,#dd2476);
+  transition: 0.3s;
+}
+
+/* QUESTION */
+.question {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* OPTION FIXED */
+.option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  width: 100%;
+  padding: 12px 14px;
+  margin: 10px 0;
+
+  background: white;
+  border-radius: 12px;
+  cursor: pointer;
+
+  transition: 0.25s ease;
+  flex-wrap: wrap;
+}
+
+.option:hover {
+  transform: translateY(-3px) scale(1.02);
+  background: linear-gradient(90deg, #ffecd2, #fcb69f);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+}
+
+.option input {
+  transform: scale(1.2);
+  flex-shrink: 0;
+}
+
+.option span {
+  flex: 1;
+  word-break: break-word;
+}
+
+/* BUTTON */
+button {
+  margin-top: 10px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+
+  background: linear-gradient(45deg,#ff512f,#dd2476);
+  color: white;
+  font-size: 16px;
+
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+/* RESULT */
+.result {
+  text-align: center;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* ANSWERS */
+.answers {
+  margin-top: 10px;
+  background: white;
+  padding: 10px;
+  border-radius: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="quiz-box">
+
+  <!-- LOGIN -->
+  <div id="login">
+    <h2>Login Quiz</h2>
+    <input id="name" placeholder="Enter Name" style="width:100%;padding:10px;margin:10px 0;">
+    <button onclick="start()">Start Quiz</button>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="quiz" style="display:none;">
+
+    <div class="top">
+      <div id="qno">Q1/3</div>
+      <div>⏱ <span id="time">10</span>s</div>
+    </div>
+
+    <div class="progress">
+      <div class="progress-fill" id="bar"></div>
+    </div>
+
+    <div class="question" id="question"></div>
+    <div id="options"></div>
+
+    <button onclick="next()">Next</button>
+  </div>
+
+  <!-- RESULT -->
+  <div id="result" class="result" style="display:none;"></div>
+
+</div>
+
+<script>
+
+const questions = [
+  {
+    q:"HTML stands for?",
+    o:["Markup Language","Programming Language","Database"],
+    a:0
+  },
+  {
+    q:"Select programming languages:",
+    o:["HTML","CSS","JavaScript","Python"],
+    a:[2,3]
+  },
+  {
+    q:"CSS stands for ____ Style Sheets",
+    o:[],
+    a:"Cascading",
+    type:"text"
+  }
+];
+
+let i = 0;
+let score = 0;
+let user = "";
+let timer;
+
+/* LOGIN */
+function start(){
+  user = document.getElementById("name").value;
+  if(!user) return alert("Enter name");
+
+  document.getElementById("login").style.display="none";
+  document.getElementById("quiz").style.display="block";
+
+  load();
+}
+
+/* LOAD QUESTION */
+function load(){
+
+  clearInterval(timer);
+  let time = 10;
+
+  document.getElementById("time").innerText = time;
+
+  timer = setInterval(()=>{
+    time--;
+    document.getElementById("time").innerText = time;
+    if(time === 0) next();
+  },1000);
+
+  let q = questions[i];
+
+  document.getElementById("qno").innerText = `Q${i+1}/${questions.length}`;
+  document.getElementById("bar").style.width = (i/questions.length)*100 + "%";
+  document.getElementById("question").innerText = q.q;
+
+  let html = "";
+
+  if(q.type === "text"){
+    html = `<input id="txt" style="width:100%;padding:10px;">`;
+  }
+  else{
+    q.o.forEach((opt,idx)=>{
+      html += `
+      <label class="option">
+        <input type="checkbox" value="${idx}">
+        <span>${opt}</span>
+      </label>`;
+    });
+  }
+
+  document.getElementById("options").innerHTML = html;
+}
+
+/* NEXT */
+function next(){
+
+  let q = questions[i];
+
+  if(q.type === "text"){
+    let val = document.getElementById("txt").value;
+    if(val.toLowerCase() === q.a.toLowerCase()) score++;
+  }
+  else{
+    let sel = document.querySelectorAll("input:checked");
+    let v = Array.from(sel).map(x=>+x.value);
+
+    if(JSON.stringify(v.sort()) === JSON.stringify([q.a].flat().sort())){
+      score++;
+    }
+  }
+
+  i++;
+  if(i < questions.length){
+    load();
+  } else {
+    show();
+  }
+}
+
+/* RESULT + LEADERBOARD + VIEW ANSWERS */
+function show(){
+
+  clearInterval(timer);
+  document.getElementById("quiz").style.display="none";
+  document.getElementById("result").style.display="block";
+
+  let data = JSON.parse(localStorage.getItem("lb")) || [];
+  data.push({user,score});
+  localStorage.setItem("lb",JSON.stringify(data));
+
+  data.sort((a,b)=>b.score-a.score);
+
+  let html = `
+  🎉 <b>${user}</b> Score: ${score}/${questions.length}
+  <br><br>
+
+  <button onclick="viewAnswers()">View Answers</button>
+
+  <h3 style="margin-top:15px;">🏆 Leaderboard</h3>
+  `;
+
+  data.slice(0,5).forEach((p,index)=>{
+    html += `<p>${index+1}. ${p.user} - ${p.score}</p>`;
+  });
+
+  document.getElementById("result").innerHTML = html;
+}
+
+/* VIEW ANSWERS */
+function viewAnswers(){
+
+  let html = "<h3>📘 Correct Answers</h3><br>";
+
+  questions.forEach((q,i)=>{
+
+    html += `<p><b>Q${i+1}:</b> ${q.q}<br>`;
+
+    if(q.type === "text"){
+      html += `Answer: <b>${q.a}</b>`;
+    }
+    else{
+      let ans = q.o.map((opt,idx)=>{
+        if([q.a].flat().includes(idx)) return opt;
+      }).filter(Boolean);
+
+      html += `Answer: <b>${ans.join(", ")}</b>`;
+    }
+
+    html += "</p><br>";
+  });
+
+  document.getElementById("result").innerHTML = html;
+}
+
+</script>
+
+</body>
+</html>
