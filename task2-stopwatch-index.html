@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stopwatch Web App</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #1e1e2f, #0f172a);
+  color: white;
+}
+
+.container {
+  text-align: center;
+  padding: 30px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.4);
+  width: 350px;
+}
+
+/* TIME DISPLAY */
+.time {
+  font-size: 40px;
+  margin-bottom: 20px;
+  letter-spacing: 2px;
+}
+
+/* BUTTONS */
+.buttons button {
+  padding: 10px 15px;
+  margin: 5px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+.start { background: #00c853; color: white; }
+.pause { background: #ffab00; color: black; }
+.reset { background: #d50000; color: white; }
+.lap { background: #2979ff; color: white; }
+
+.buttons button:hover {
+  transform: scale(1.1);
+}
+
+/* LAP LIST */
+.laps {
+  margin-top: 15px;
+  max-height: 150px;
+  overflow-y: auto;
+  text-align: left;
+}
+
+.laps li {
+  padding: 5px;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="time" id="display">00:00:00</div>
+
+  <div class="buttons">
+    <button class="start" onclick="start()">Start</button>
+    <button class="pause" onclick="pause()">Pause</button>
+    <button class="reset" onclick="reset()">Reset</button>
+    <button class="lap" onclick="lap()">Lap</button>
+  </div>
+
+  <ul class="laps" id="laps"></ul>
+
+</div>
+
+<script>
+let timer;
+let seconds = 0;
+let running = false;
+
+/* FORMAT TIME */
+function formatTime(sec) {
+  let hrs = Math.floor(sec / 3600);
+  let mins = Math.floor((sec % 3600) / 60);
+  let secs = sec % 60;
+
+  return (
+    String(hrs).padStart(2, '0') + ":" +
+    String(mins).padStart(2, '0') + ":" +
+    String(secs).padStart(2, '0')
+  );
+}
+
+/* DISPLAY UPDATE */
+function updateDisplay() {
+  document.getElementById("display").innerText = formatTime(seconds);
+}
+
+/* START */
+function start() {
+  if (!running) {
+    running = true;
+    timer = setInterval(() => {
+      seconds++;
+      updateDisplay();
+    }, 1000);
+  }
+}
+
+/* PAUSE */
+function pause() {
+  running = false;
+  clearInterval(timer);
+}
+
+/* RESET */
+function reset() {
+  running = false;
+  clearInterval(timer);
+  seconds = 0;
+  updateDisplay();
+  document.getElementById("laps").innerHTML = "";
+}
+
+/* LAP */
+function lap() {
+  if (running) {
+    let li = document.createElement("li");
+    li.innerText = "Lap: " + formatTime(seconds);
+    document.getElementById("laps").appendChild(li);
+  }
+}
+</script>
+
+</body>
+</html>
